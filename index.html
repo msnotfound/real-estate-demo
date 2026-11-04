@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Aura Living | Modern Luxury Real Estate & Residences</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+            serif: ['"Playfair Display"', 'serif'],
+          },
+          colors: {
+            primary: '#0F172A',
+            accent: '#D97706',
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    [x-cloak] { display: none !important; }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans antialiased selection:bg-amber-100 selection:text-amber-900" x-data="realEstateApp()">
+
+  <!-- Top Announcement Bar -->
+  <div class="bg-slate-900 text-slate-300 text-xs py-2 px-4 border-b border-slate-800">
+    <div class="max-w-7xl mx-auto flex justify-between items-center">
+      <div class="flex items-center space-x-4">
+        <span>📍 Prime Waterfront, Suburban & Metropolitan Properties</span>
+        <span class="hidden md:inline">|</span>
+        <span class="hidden md:inline">📞 Direct Concierge: +1 (800) 555-REAL</span>
+      </div>
+      <div class="flex items-center space-x-4">
+        <span class="text-amber-400 font-medium">⚡ 4 New Listings Added Today</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Header / Navigation -->
+  <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+      <div class="flex items-center space-x-3">
+        <div class="w-10 h-10 rounded-xl bg-slate-950 flex items-center justify-center text-amber-400 shadow-md">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+        </div>
+        <div>
+          <span class="font-serif text-2xl font-bold tracking-tight text-slate-950">AURA<span class="text-amber-600">.</span></span>
+          <span class="text-[10px] block uppercase tracking-widest font-semibold text-slate-500">Luxury Real Estate</span>
+        </div>
+      </div>
+
+      <nav class="hidden md:flex items-center space-x-8 text-sm font-medium text-slate-600">
+        <a href="#properties" class="hover:text-amber-600 transition">Featured Listings</a>
+        <a href="#filters" class="hover:text-amber-600 transition">Search MLS</a>
+        <a href="#valuation" class="hover:text-amber-600 transition">Instant Valuation</a>
+        <a href="#contact" class="hover:text-amber-600 transition">Our Brokers</a>
+      </nav>
+
+      <div class="flex items-center space-x-3">
+        <button @click="openModal('valuation')" class="hidden sm:inline-flex px-4 py-2 text-sm font-semibold text-slate-700 bg-slate-100 hover:bg-slate-200 rounded-lg transition">Free Valuation</button>
+        <button @click="openModal('tour')" class="px-5 py-2.5 text-sm font-semibold text-white bg-slate-950 hover:bg-slate-800 rounded-lg shadow-sm hover:shadow transition">Schedule Tour</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="relative bg-gradient-to-b from-slate-900 to-slate-950 text-white py-20 px-4 sm:px-6 lg:px-8 overflow-hidden">
+    <div class="absolute inset-0 opacity-20 bg-[radial-gradient(#d97706_1px,transparent_1px)] [background-size:24px_24px]"></div>
+    <div class="max-w-5xl mx-auto text-center relative z-10">
+      <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-slate-800/80 border border-slate-700 text-amber-400 text-xs font-semibold mb-6">
+        <span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span> Certified Modern MLS & Brokerage Portal
+      </div>
+      <h1 class="font-serif text-4xl sm:text-6xl font-extrabold tracking-tight leading-tight text-white mb-6">
+        Find Your Next Architectural Sanctuary.
+      </h1>
+      <p class="text-slate-400 text-lg sm:text-xl max-w-2xl mx-auto mb-10 font-light">
+        Curated modern residences, waterfront penthouses, and private estates. Transparent pricing, verified deeds, and white-glove private viewings.
+      </p>
+
+      <!-- Search Filter Bar -->
+      <div class="bg-white p-4 sm:p-5 rounded-2xl shadow-2xl text-slate-800 max-w-4xl mx-auto grid grid-cols-1 sm:grid-cols-4 gap-4 items-center">
+        <div class="text-left px-2">
+          <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-1">Location</label>
+          <input type="text" x-model="searchQuery" placeholder="City, neighborhood, or zip" class="w-full text-sm font-medium text-slate-900 focus:outline-none placeholder:text-slate-400">
+        </div>
+        <div class="text-left px-2 border-t sm:border-t-0 sm:border-l border-slate-200">
+          <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-1">Property Type</label>
+          <select x-model="selectedType" class="w-full text-sm font-medium text-slate-900 bg-transparent focus:outline-none cursor-pointer">
+            <option value="All">All Types</option>
+            <option value="Villa">Luxury Villa</option>
+            <option value="Penthouse">Penthouse</option>
+            <option value="Condo">Modern Condo</option>
+            <option value="Single Family">Single Family</option>
+          </select>
+        </div>
+        <div class="text-left px-2 border-t sm:border-t-0 sm:border-l border-slate-200">
+          <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-1">Max Price</label>
+          <select x-model="selectedPrice" class="w-full text-sm font-medium text-slate-900 bg-transparent focus:outline-none cursor-pointer">
+            <option value="All">Any Price</option>
+            <option value="1000000">Up to $1.0M</option>
+            <option value="2500000">Up to $2.5M</option>
+            <option value="5000000">Up to $5.0M</option>
+          </select>
+        </div>
+        <button @click="filterProperties()" class="w-full py-3.5 bg-amber-600 hover:bg-amber-700 text-white font-semibold rounded-xl transition flex items-center justify-center space-x-2 shadow-lg shadow-amber-600/30">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+          <span>Find Homes</span>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Filter Pills -->
+  <section id="filters" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-12">
+    <div class="flex flex-wrap items-center justify-between gap-4 pb-6 border-b border-slate-200">
+      <div>
+        <h2 class="text-2xl font-bold text-slate-900 font-serif">Curated Properties</h2>
+        <p class="text-sm text-slate-500">Showing <span class="font-semibold text-slate-900" x-text="filteredProperties.length"></span> verified listings</p>
+      </div>
+
+      <div class="flex flex-wrap items-center gap-2">
+        <template x-for="category in categories" :key="category">
+          <button @click="currentCategory = category"
+                  :class="currentCategory === category ? 'bg-slate-900 text-white' : 'bg-white text-slate-600 hover:bg-slate-100 border border-slate-200'"
+                  class="px-4 py-2 rounded-lg text-xs font-semibold transition"
+                  x-text="category"></button>
+        </template>
+      </div>
+    </div>
+  </section>
+
+  <!-- Property Grid -->
+  <section id="properties" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <template x-for="p in filteredProperties" :key="p.id">
+        <div class="bg-white rounded-2xl overflow-hidden border border-slate-200/80 shadow-sm hover:shadow-xl transition-all duration-300 group flex flex-col">
+          <!-- Image Container -->
+          <div class="relative h-64 overflow-hidden bg-slate-100">
+            <img :src="p.image" :alt="p.title" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+            <div class="absolute top-4 left-4 flex gap-2">
+              <span class="px-2.5 py-1 text-[11px] font-bold uppercase rounded-md tracking-wider bg-slate-900/90 text-white backdrop-blur-md" x-text="p.status"></span>
+              <span class="px-2.5 py-1 text-[11px] font-bold uppercase rounded-md tracking-wider bg-amber-500 text-white backdrop-blur-md" x-text="p.type"></span>
+            </div>
+            <div class="absolute bottom-4 right-4 bg-white/95 px-3 py-1.5 rounded-lg text-sm font-bold text-slate-900 shadow backdrop-blur-md" x-text="formatPrice(p.price)"></div>
+          </div>
+
+          <!-- Body -->
+          <div class="p-6 flex-1 flex flex-col justify-between">
+            <div>
+              <div class="text-xs font-semibold text-amber-700 uppercase tracking-wider mb-1" x-text="p.neighborhood"></div>
+              <h3 class="font-serif text-xl font-bold text-slate-950 mb-2 group-hover:text-amber-600 transition" x-text="p.title"></h3>
+              <p class="text-sm text-slate-500 flex items-center gap-1.5 mb-4">
+                <svg class="w-4 h-4 text-slate-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                <span x-text="p.address"></span>
+              </p>
+            </div>
+
+            <!-- Specs -->
+            <div>
+              <div class="grid grid-cols-3 gap-2 py-3 border-y border-slate-100 text-center text-xs font-medium text-slate-600 mb-5">
+                <div>
+                  <span class="block font-bold text-slate-900" x-text="p.beds"></span> Beds
+                </div>
+                <div>
+                  <span class="block font-bold text-slate-900" x-text="p.baths"></span> Baths
+                </div>
+                <div>
+                  <span class="block font-bold text-slate-900" x-text="p.sqft"></span> Sq Ft
+                </div>
+              </div>
+
+              <!-- CTA -->
+              <div class="flex items-center gap-2">
+                <button @click="openTourModal(p)" class="flex-1 py-2.5 bg-slate-900 hover:bg-slate-800 text-white rounded-lg text-xs font-bold transition">
+                  Book Viewing
+                </button>
+                <button @click="alert('Inquiry sent for ' + p.title)" class="px-3 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-xs font-bold transition">
+                  Details
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </template>
+    </div>
+  </section>
+
+  <!-- Interactive Valuation Banner -->
+  <section id="valuation" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+    <div class="bg-gradient-to-r from-slate-900 via-slate-800 to-amber-950 rounded-3xl p-8 sm:p-12 text-white relative overflow-hidden shadow-2xl">
+      <div class="max-w-2xl relative z-10">
+        <span class="text-amber-400 text-xs font-bold uppercase tracking-widest">Seller Advisory</span>
+        <h2 class="font-serif text-3xl sm:text-4xl font-extrabold mt-2 mb-4">Thinking of Selling Your Property?</h2>
+        <p class="text-slate-300 text-sm sm:text-base mb-8">
+          Get an AI-assisted automated valuation model (AVM) backed by recent comps and our local neighborhood specialist appraisal.
+        </p>
+        <div class="flex flex-col sm:flex-row gap-3">
+          <input type="text" placeholder="Enter your full street address..." class="px-4 py-3.5 rounded-xl bg-white/10 border border-white/20 text-white placeholder:text-slate-400 focus:outline-none focus:bg-white/20 text-sm flex-1">
+          <button @click="openModal('valuation')" class="px-6 py-3.5 bg-amber-500 hover:bg-amber-600 text-white font-bold rounded-xl text-sm transition shadow-lg shadow-amber-500/30 whitespace-nowrap">
+            Calculate Equity
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-white border-t border-slate-200 py-12 px-4 sm:px-6 lg:px-8 text-slate-500 text-xs">
+    <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
+      <div>
+        <p class="font-serif font-bold text-slate-900 text-sm">AURA LUXURY REAL ESTATE</p>
+        <p class="mt-1">Built with high-performance responsive Next.js & Tailwind architecture.</p>
+      </div>
+      <div class="flex gap-6">
+        <a href="#" class="hover:text-slate-900">Privacy Policy</a>
+        <a href="#" class="hover:text-slate-900">MLS Compliance</a>
+        <a href="#" class="hover:text-slate-900">Equal Housing Opportunity</a>
+      </div>
+      <p>© 2026 Aura Residences. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <!-- Modal -->
+  <div x-show="modalOpen" x-cloak class="fixed inset-0 z-50 overflow-y-auto bg-slate-950/70 backdrop-blur-sm flex items-center justify-center p-4">
+    <div @click.away="modalOpen = false" class="bg-white rounded-2xl max-w-md w-full p-6 sm:p-8 shadow-2xl relative">
+      <button @click="modalOpen = false" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+      </button>
+
+      <div x-show="modalType === 'tour'">
+        <div class="text-xs font-bold text-amber-600 uppercase tracking-wider mb-1">Private Tour</div>
+        <h3 class="font-serif text-2xl font-bold text-slate-950 mb-2">Schedule a Private Viewing</h3>
+        <p class="text-xs text-slate-500 mb-6" x-text="'Listing: ' + (activeProperty ? activeProperty.title : 'Selected Property')"></p>
+
+        <form @submit.prevent="submitForm">
+          <div class="space-y-4 text-left">
+            <div>
+              <label class="block text-xs font-semibold text-slate-700 mb-1">Full Name</label>
+              <input type="text" required placeholder="Elena Volkova" class="w-full px-3.5 py-2.5 rounded-lg border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-slate-900">
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-slate-700 mb-1">Email / Phone</label>
+              <input type="text" required placeholder="elena@example.com or WhatsApp #" class="w-full px-3.5 py-2.5 rounded-lg border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-slate-900">
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-slate-700 mb-1">Preferred Date</label>
+              <input type="date" class="w-full px-3.5 py-2.5 rounded-lg border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-slate-900">
+            </div>
+            <button type="submit" class="w-full py-3 bg-slate-950 hover:bg-slate-800 text-white font-bold rounded-lg text-sm transition">
+              Confirm Viewing Appointment
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <div x-show="modalType === 'valuation'">
+        <div class="text-xs font-bold text-amber-600 uppercase tracking-wider mb-1">Valuation Report</div>
+        <h3 class="font-serif text-2xl font-bold text-slate-950 mb-2">Request Free Valuation</h3>
+        <p class="text-xs text-slate-500 mb-6">Receive an in-depth comparative market analysis for your home within 24 hours.</p>
+
+        <form @submit.prevent="submitForm">
+          <div class="space-y-4 text-left">
+            <div>
+              <label class="block text-xs font-semibold text-slate-700 mb-1">Street Address</label>
+              <input type="text" required placeholder="124 Ocean Boulevard" class="w-full px-3.5 py-2.5 rounded-lg border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-slate-900">
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-slate-700 mb-1">Your Email</label>
+              <input type="email" required placeholder="owner@gmail.com" class="w-full px-3.5 py-2.5 rounded-lg border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-slate-900">
+            </div>
+            <button type="submit" class="w-full py-3 bg-amber-600 hover:bg-amber-700 text-white font-bold rounded-lg text-sm transition">
+              Send Valuation Report
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <div x-show="formSubmitted" class="text-center py-6">
+        <div class="w-12 h-12 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center mx-auto mb-3">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+        </div>
+        <h4 class="font-bold text-slate-900 text-lg">Request Confirmed!</h4>
+        <p class="text-xs text-slate-500 mt-1">Our private concierge will contact you via WhatsApp / Email shortly.</p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function realEstateApp() {
+      return {
+        searchQuery: '',
+        selectedType: 'All',
+        selectedPrice: 'All',
+        currentCategory: 'All',
+        categories: ['All', 'For Sale', 'Luxury Villas', 'Penthouses', 'For Rent'],
+        modalOpen: false,
+        modalType: 'tour',
+        activeProperty: null,
+        formSubmitted: false,
+        properties: [
+          {
+            id: 1,
+            title: 'The Bellagio Glass Pavilion',
+            neighborhood: 'Pacific Palisades',
+            address: '742 Vista Pacifica Ridge, Malibu, CA',
+            price: 2450000,
+            beds: 5,
+            baths: 6,
+            sqft: '6,200',
+            type: 'Villa',
+            category: 'Luxury Villas',
+            status: 'For Sale',
+            image: 'https://images.unsplash.com/photo-1613490493576-7fde63acd811?auto=format&fit=crop&w=800&q=80'
+          },
+          {
+            id: 2,
+            title: 'Skyline Skydeck Penthouse',
+            neighborhood: 'Downtown Highline',
+            address: '880 Grand Avenue, Floor 42, NY',
+            price: 1890000,
+            beds: 3,
+            baths: 3.5,
+            sqft: '3,450',
+            type: 'Penthouse',
+            category: 'Penthouses',
+            status: 'For Sale',
+            image: 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=800&q=80'
+          },
+          {
+            id: 3,
+            title: 'The Nordic Oak Residence',
+            neighborhood: 'Greenwood Forest',
+            address: '14 Laurel Canyon Way, Aspen, CO',
+            price: 920000,
+            beds: 4,
+            baths: 3,
+            sqft: '2,900',
+            type: 'Single Family',
+            category: 'For Sale',
+            status: 'For Sale',
+            image: 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=800&q=80'
+          },
+          {
+            id: 4,
+            title: 'Marina Horizon Loft',
+            neighborhood: 'Biscayne Marina',
+            address: '300 Ocean Drive, Miami, FL',
+            price: 780000,
+            beds: 2,
+            baths: 2,
+            sqft: '1,820',
+            type: 'Condo',
+            category: 'For Sale',
+            status: 'For Sale',
+            image: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=80'
+          },
+          {
+            id: 5,
+            title: 'Villa Paradiso Waterfront',
+            neighborhood: 'Palm Beach Cove',
+            address: '121 Pelican Point, Palm Beach, FL',
+            price: 4950000,
+            beds: 6,
+            baths: 7,
+            sqft: '8,400',
+            type: 'Villa',
+            category: 'Luxury Villas',
+            status: 'For Sale',
+            image: 'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=800&q=80'
+          },
+          {
+            id: 6,
+            title: 'The Modern Minimalist Haven',
+            neighborhood: 'Silver Lake',
+            address: '412 Westwood Terrace, Los Angeles, CA',
+            price: 1350000,
+            beds: 3,
+            baths: 2.5,
+            sqft: '2,400',
+            type: 'Single Family',
+            category: 'For Sale',
+            status: 'For Sale',
+            image: 'https://images.unsplash.com/photo-1600566753376-12c8ab7fb75b?auto=format&fit=crop&w=800&q=80'
+          }
+        ],
+        get filteredProperties() {
+          return this.properties.filter(p => {
+            const matchesCat = this.currentCategory === 'All' || p.category === this.currentCategory || p.status === this.currentCategory;
+            const matchesType = this.selectedType === 'All' || p.type === this.selectedType;
+            const matchesPrice = this.selectedPrice === 'All' || p.price <= parseInt(this.selectedPrice);
+            const matchesSearch = !this.searchQuery || 
+              p.title.toLowerCase().includes(this.searchQuery.toLowerCase()) || 
+              p.address.toLowerCase().includes(this.searchQuery.toLowerCase()) || 
+              p.neighborhood.toLowerCase().includes(this.searchQuery.toLowerCase());
+            return matchesCat && matchesType && matchesPrice && matchesSearch;
+          });
+        },
+        formatPrice(val) {
+          return '$' + val.toLocaleString();
+        },
+        openTourModal(p) {
+          this.activeProperty = p;
+          this.modalType = 'tour';
+          this.formSubmitted = false;
+          this.modalOpen = true;
+        },
+        openModal(type) {
+          this.modalType = type;
+          this.formSubmitted = false;
+          this.modalOpen = true;
+        },
+        submitForm() {
+          this.formSubmitted = true;
+          setTimeout(() => {
+            this.modalOpen = false;
+            this.formSubmitted = false;
+          }, 2000);
+        }
+      }
+    }
+  </script>
+</body>
+</html>
